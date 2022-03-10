@@ -32,62 +32,72 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
         appBar: AppBar(title: Text("Cattle DB Demo")),
         body: Column(
-        children: [
-          Expanded(
-            child: FutureBuilder(
-                future: catProList,
-                builder: (context, AsyncSnapshot<List<CattlePro>> snapshot) {
-                  if (snapshot.hasData) {
-                    return ListView.builder(
-                        reverse: false,
-                        shrinkWrap: true,
-                        itemCount: snapshot.data?.length,
-                        itemBuilder: (context, index) {
-                          return InkWell(
-                            onTap: (){
-                             
-                           
-                            },
-                            child: Dismissible(
-                              direction: DismissDirection.endToStart,
-                              background: Container(
-                                  color: Colors.red,
-                                  alignment: Alignment.centerRight,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10.0),
-                                  child: Icon(Icons.delete_forever)),
-                              onDismissed: (DismissDirection direction) {
+          children: [
+            Expanded(
+              child: FutureBuilder(
+                  future: catProList,
+                  builder: (context, AsyncSnapshot<List<CattlePro>> snapshot) {
+                    if (snapshot.hasData) {
+                      return ListView.builder(
+                          reverse: false,
+                          shrinkWrap: true,
+                          itemCount: snapshot.data?.length,
+                          itemBuilder: (context, index) {
+                            return InkWell(
+                              onTap: () {
+                                dbHelper.updateCatPro(CattlePro(
+                                  id: snapshot.data[index].id,
+                                    name: 'cattle000',
+                                    gender: 'female',
+                                    species: 'chalolais'));
+                                
                                 setState(() {
-                                  
+                                  catProList = dbHelper.getListCattlePro();
                                 });
                               },
-                              key: ValueKey<int>(snapshot.data[index].id),
-                              child: Card(
-                                child: ListTile(
-                                  contentPadding: EdgeInsets.all(0),
-                                  title: Text(
-                                      snapshot.data[index].name.toString()),
-                                  subtitle: Text(snapshot.data[index].gender
-                                      .toString()),
-                                  trailing:
-                                      Text(snapshot.data[index].species.toString()),
+                              child: Dismissible(
+                                direction: DismissDirection.endToStart,
+                                background: Container(
+                                    color: Colors.red,
+                                    alignment: Alignment.centerRight,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10.0),
+                                    child: Icon(Icons.delete_forever)),
+                                onDismissed: (DismissDirection direction) {
+                                  setState(() {
+                                    dbHelper
+                                        .deleteCatPro(snapshot.data[index].id);
+                                    catProList = dbHelper.getListCattlePro();
+                                    snapshot.data.remove(snapshot.data[index]);
+                                  });
+                                },
+                                key: ValueKey<int>(snapshot.data[index].id),
+                                child: Card(
+                                  child: ListTile(
+                                    contentPadding: EdgeInsets.all(0),
+                                    title: Text(
+                                        snapshot.data[index].name.toString()),
+                                    subtitle: Text(
+                                        snapshot.data[index].gender.toString()),
+                                    trailing: Text(snapshot.data[index].species
+                                        .toString()),
+                                  ),
                                 ),
                               ),
-                            ),
-                          );
-                        });
-                  } else {
-                    return CircularProgressIndicator();
-                  }
-                }),
-          ),
-        ],
-      ),
+                            );
+                          });
+                    } else {
+                      return CircularProgressIndicator();
+                    }
+                  }),
+            ),
+          ],
+        ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             dbHelper
                 .insertCatPro(CattlePro(
-                    name:'cattle123',gender:'male', species:'barhman'))
+                    name: 'cattle123', gender: 'male', species: 'barhman'))
                 .then((value) {
               print("Add data completed");
               setState(() {

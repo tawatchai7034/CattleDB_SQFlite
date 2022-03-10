@@ -68,19 +68,30 @@ class DBHelper {
     );
   }
 
-  Future<int> deleteProduct(CattlePro catPro) async {
+  Future<int> deleteCatPro(int id) async {
     var dbClient = await db;
+    // int result = await dbClient!.delete(
+    //   'catTime',
+    //   where: 'CPid = ?',
+    //   whereArgs: [id],
+    // );
     int result = await dbClient!.delete(
-      'catTime',
-      where: 'CPid = ?',
-      whereArgs: [catPro.id],
-    );
-    result = await dbClient.delete(
       'catPro',
-      where: 'CPid = ?',
-      whereArgs: [catPro.id],
+      where: 'id = ?',
+      whereArgs: [id],
     );
 
-    return result;
+    return  result;
   }
+
+   Future<int> updateCatPro(CattlePro catPro) async {
+    var dbClient = await db;
+    return await dbClient!.update(
+      'catPro',
+      catPro.toMap(),
+      where: 'id = ?',
+      whereArgs: [catPro.id],
+    );
+  }
+
 }
