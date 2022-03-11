@@ -1,18 +1,18 @@
 class CattleTime {
   final int? id;
-  final int? CPid;
-  final double bodyLenght;
-  final double heartGirth;
-  final double hearLenghtSide;
-  final double hearLenghtRear;
-  final double hearLenghtTop;
-  final double PixelReference;
-  final double DistanceReference;
-  final DateTime date;
+  final int CPid;
+  final int bodyLenght;
+  final int heartGirth;
+  final int hearLenghtSide;
+  final int hearLenghtRear;
+  final int hearLenghtTop;
+  final int PixelReference;
+  final int DistanceReference;
+  final String date;
 
   CattleTime(
       {this.id,
-       this.CPid,
+      required this.CPid,
       required this.bodyLenght,
       required this.heartGirth,
       required this.hearLenghtSide,

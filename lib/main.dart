@@ -1,5 +1,5 @@
 // @dart=2.9
-import 'package:cat_db/homeScreen.dart';
+import 'package:cat_db/catProHomeScreen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomeScreen(),
+      home: CatProHomeScreen(),
     );
   }
 }

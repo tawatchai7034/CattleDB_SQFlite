@@ -26,7 +26,7 @@ class DBHelper {
         database.execute(
             'CREATE TABLE catPro(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, gender TEXT,species TEXT)');
         database.execute(
-            'CREATE TABLE catTime(id INTEGER PRIMARY KEY AUTOINCREMENT, CPid INTEGER,bodyLenght DOUBLE,heartGirth DOUBLE,hearLenghtSide DOUBLE,hearLenghtRear DOUBLE,hearLenghtTop DOUBLE,PixelReference DOUBLE,DistanceReference DOUBLE,date DATETIME)' +
+            'CREATE TABLE catTime(id INTEGER PRIMARY KEY AUTOINCREMENT, CPid INTEGER,bodyLenght REAL,heartGirth REAL,hearLenghtSide REAL,hearLenghtRear REAL,hearLenghtTop REAL,PixelReference REAL,DistanceReference REAL,date TEXT NOT NULL)' +
                 'FOREIGN KEY(CPid) REFERENCES catPro(id))');
       },
     );
@@ -41,7 +41,7 @@ class DBHelper {
 
   Future<CattleTime> insertCatTime(CattleTime catTime) async {
     var dbClient = await db;
-    await dbClient!.insert('catTime', catTime.toMap());
+    await dbClient!.insert('catTime', catTime.toMap(),conflictAlgorithm: ConflictAlgorithm.replace,);
     return catTime;
   }
 

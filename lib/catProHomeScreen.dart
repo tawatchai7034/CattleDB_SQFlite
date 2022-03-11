@@ -1,17 +1,18 @@
 // @dart=2.9
 import 'package:cat_db/db/dbHelper.dart';
+import 'package:cat_db/models/cattles.dart';
+import 'package:cat_db/ui/catTimeHomeScreen.dart';
 import 'models/catPro.dart';
-import 'models/cattles.dart';
 import 'package:flutter/material.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key key}) : super(key: key);
+class CatProHomeScreen extends StatefulWidget {
+  const CatProHomeScreen({Key key}) : super(key: key);
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<CatProHomeScreen> createState() => _CatProHomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _CatProHomeScreenState extends State<CatProHomeScreen> {
   DBHelper dbHelper;
   Future<List<CattlePro>> catProList;
 
@@ -45,15 +46,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           itemBuilder: (context, index) {
                             return InkWell(
                               onTap: () {
-                                dbHelper.updateCatPro(CattlePro(
-                                  id: snapshot.data[index].id,
-                                    name: 'cattle000',
-                                    gender: 'female',
-                                    species: 'chalolais'));
-                                
-                                setState(() {
-                                  catProList = dbHelper.getListCattlePro();
-                                });
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => CatTimeHomeScreen(
+                                        catpro: snapshot.data[index],
+                                      ),
+                                    ));
                               },
                               child: Dismissible(
                                 direction: DismissDirection.endToStart,
@@ -74,13 +73,30 @@ class _HomeScreenState extends State<HomeScreen> {
                                 key: ValueKey<int>(snapshot.data[index].id),
                                 child: Card(
                                   child: ListTile(
-                                    contentPadding: EdgeInsets.all(0),
+                                    contentPadding: EdgeInsets.all(16),
                                     title: Text(
-                                        snapshot.data[index].name.toString()),
+                                      "${snapshot.data[index].name.toString()}",
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w500),
+                                    ),
                                     subtitle: Text(
-                                        snapshot.data[index].gender.toString()),
-                                    trailing: Text(snapshot.data[index].species
-                                        .toString()),
+                                        "Gender: ${snapshot.data[index].gender.toString()}\nSpecies: ${snapshot.data[index].species.toString()}"),
+                                    trailing: IconButton(
+                                      icon: Icon(Icons.edit),
+                                      onPressed: () {
+                                        dbHelper.updateCatPro(CattlePro(
+                                            id: snapshot.data[index].id,
+                                            name: 'cattle000',
+                                            gender: 'female',
+                                            species: 'chalolais'));
+
+                                        setState(() {
+                                          catProList =
+                                              dbHelper.getListCattlePro();
+                                        });
+                                      },
+                                    ),
                                   ),
                                 ),
                               ),
